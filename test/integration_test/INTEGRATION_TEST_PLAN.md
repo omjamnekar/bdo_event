@@ -56,7 +56,7 @@ The initial planning pass is complete. The foundation now contains shared harnes
 - Implemented but unverified: added a separate 10-minute GitHub Actions `integration-smoke` job that runs every shared harness, actor, fixture, and cleanup contract under `test/integration_test/shared`, followed by the integration runner smoke test.
 - Implemented but unverified: added a separate 25-minute GitHub Actions `integration-p0` job that starts disposable Supabase, resets and lints migrations, verifies the latest migration ledger entry, exports local app/cleanup credentials, runs the explicit P0 data and authenticated UI journeys, uploads failure logs, and always stops Supabase.
 - Implemented but unverified: added a separate scheduled/manual `integration-p1.yml` job that starts disposable Supabase, resets and lints migrations, verifies the latest migration ledger entry, exports local app/cleanup credentials, and runs shared harness contracts plus the implemented P1 journeys.
-- Completed: restricted the generic CI test job to `test/core`, `test/features`, and `test/shared` so Supabase-dependent integration tests run only in the dedicated integration jobs.
+- Completed: restricted the generic CI test job to `test/unit/core`, `test/unit/features`, and `test/shared` so Supabase-dependent integration tests run only in the dedicated integration jobs.
 - Completed: added `test/integration_test/.env.example` documenting public app credentials, host-only cleanup credentials, and optional migration diagnostics; it contains no real secrets and is not a Flutter asset.
 - Completed: extracted `ApplicationBootstrap` from `main.dart` with injectable startup steps and order-sensitive tests; added `resetDependencies()` and disposal callbacks for singleton Cubits.
 - Implemented but unverified: added `shared/harness/authenticated_app_harness.dart`; it starts production `MyApp` with a real Supabase session, a no-op deep-link source, and native services disabled for host-safe UI journeys.
@@ -67,10 +67,10 @@ The initial planning pass is complete. The foundation now contains shared harnes
 - Implemented but unverified: added an injectable Nominatim location-search adapter with explicit HTTP-client disposal, plus focused `CreateEventPage` widget coverage for query dispatch and result population.
 - Implemented but unverified: added a `LocalNotificationAdapter` boundary for notification initialization, permission, scheduling, reconciliation, and cancellation, with service-level recording-adapter tests and native failure containment; OS delivery remains device-only.
 - Implemented but unverified: added a `BiometricAdapter` boundary for availability and authentication, with recording-adapter service tests; OS biometric prompts remain device-only.
-- Implemented but unverified: added `test/features/main_screen/presentation/widgets/main_screen_responsive_widget_test.dart`; it covers narrow layouts, large text, high contrast, dark theme, keyboard footer behavior, and account-menu semantics. Physical-device accessibility traversal remains pending.
-- Implemented but unverified: added `test/core/security/biometric_lock_gate_widget_test.dart`; it covers startup locking, pause/resume authentication, failed authentication retention, and preference-driven unlock. OS biometric prompts remain device-only.
+- Implemented but unverified: added `test/unit/features/main_screen/presentation/widgets/main_screen_responsive_widget_test.dart`; it covers narrow layouts, large text, high contrast, dark theme, keyboard footer behavior, and account-menu semantics. Physical-device accessibility traversal remains pending.
+- Implemented but unverified: added `test/unit/core/security/biometric_lock_gate_widget_test.dart`; it covers startup locking, pause/resume authentication, failed authentication retention, and preference-driven unlock. OS biometric prompts remain device-only.
 - Implemented but unverified: the biometric gate now fails closed when its native service is not registered; the widget test covers stale enabled preferences without a service and preserves the lock without throwing.
-- Implemented but unverified: added `test/features/watcher_screen/presentation/pages/watcher_scan_screen_widget_test.dart`; it covers scanner callback routing, cooldown protection, torch/camera controls, voice and haptic feedback, native failure containment, and adapter disposal. Camera permissions and real QR frames remain device-only.
+- Implemented but unverified: added `test/unit/features/watcher_screen/presentation/pages/watcher_scan_screen_widget_test.dart`; it covers scanner callback routing, cooldown protection, torch/camera controls, voice and haptic feedback, native failure containment, and adapter disposal. Camera permissions and real QR frames remain device-only.
 - Implemented but unverified: added a bundled-asset guard to event image cleanup so seeded asset-backed lifecycle tests cannot issue invalid Supabase Storage deletes after the event row is removed.
 - Implemented but unverified: added `supabase/config.toml` with conventional local API, database, Studio, storage, auth, and mail-catcher settings; mutable test actors and data remain per-run rather than fixed seed identities.
 - Deferred: confirming runner discovery for `test/integration_test`; if Flutter does not discover this location, move the complete tree to the conventional root `integration_test/` directory.
@@ -111,7 +111,7 @@ figure is a runtime pass rate or measured line/branch coverage.
 1. `test/integration_test/` exists, but runner discovery has not been verified because Flutter execution is blocked in the current environment.
 2. `pubspec.yaml` and `pubspec.lock` declare `integration_test`; the lockfile change still needs verification with `flutter pub get`.
 3. `.github/workflows/dart.yml` has isolated smoke and P0 Supabase jobs, but no device, coverage, duration, or flake-reporting job exists yet.
-4. `test/features/notification_screen/presentation/pages/notification_screen_widget_test.dart` previously contained duplicate `loadEventAttendees` methods in `FakeNotificationEventStore`. Phase 0 removed the duplicate and moved the shared fixture to `test/shared/fixtures/fake_notification_event_store.dart`.
+4. `test/unit/features/notification_screen/presentation/pages/notification_screen_widget_test.dart` previously contained duplicate `loadEventAttendees` methods in `FakeNotificationEventStore`. Phase 0 removed the duplicate and moved the shared fixture to `test/shared/fixtures/fake_notification_event_store.dart`.
 5. Some legacy unit/widget tests still contain local fakes or feature-test imports. Integration tests must not depend on presentation test files or their broad `UnimplementedError` fakes; new integration support belongs in `test/integration_test/shared`.
 6. `ApplicationBootstrap` now owns the startup order previously embedded in `main.dart`, and `resetDependencies()` disposes singleton Cubits; host-safe authenticated journeys can substitute native services, while device-only adapters remain incomplete.
 7. A local `supabase/config.toml` and CI P0 job now define the disposable target and migration checks, but neither has run in the current environment.
@@ -433,7 +433,7 @@ Fixtures should return small typed handles rather than raw maps throughout the t
 | `P2-RESP-01`   | `main_screen/presentation/pages`         | Verify dark mode, large text, high contrast, narrow layout, keyboard, and accessibility traversal.     |
 
 The deterministic host portion of `P2-RESP-01` is implemented in
-`test/features/main_screen/presentation/widgets/main_screen_responsive_widget_test.dart`.
+`test/unit/features/main_screen/presentation/widgets/main_screen_responsive_widget_test.dart`.
 Physical-device execution for every P2 case remains unverified.
 
 ## 10. Test Design Techniques

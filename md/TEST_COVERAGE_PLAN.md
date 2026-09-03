@@ -30,8 +30,8 @@ Build deterministic unit, state, widget, integration, and manual coverage for th
 
 Tests mirror the production ownership tree under `lib`:
 
-- `test/core/` contains shared model and utility tests.
-- `test/features/<feature>/` mirrors the feature's `data`, `domain`, and `presentation` layers, including `cubit`, `pages`, and `widgets` folders.
+- `test/unit/core/` contains shared model and utility tests.
+- `test/unit/features/<feature>/` mirrors the feature's `data`, `domain`, and `presentation` layers, including `cubit`, `pages`, and `widgets` folders.
 - `test/shared/` contains legacy cross-feature and service tests until they can be split by owner.
 - [Integration test blueprint](../test/integration_test/INTEGRATION_TEST_PLAN.md) defines the cross-layer harness, case catalog, folder structure, and execution gates.
 
@@ -44,7 +44,7 @@ Tests mirror the production ownership tree under `lib`:
 - [~] Registration code encode/decode and malformed input handling.
 - [~] Event date and time formatting.
 - [~] Email validation.
-- [~] Notification count boundaries are covered in `test/core/model/notification_model_test.dart`.
+- [~] Notification count boundaries are covered in `test/unit/core/model/notification_model_test.dart`.
 - [~] Location serialization, display-name formatting, and office-catalog lookup.
 - [~] Shared MIME types, date formats, typography sizes, spacing values, identifiers, database/storage keys, payload keys, notification settings, and utility constants exposed through the resource facade.
 - [~] Deep-link URI construction and event-ID parsing for HTTPS/custom links and invalid inputs.
@@ -54,10 +54,10 @@ Tests mirror the production ownership tree under `lib`:
 Validation command:
 
 ```powershell
-flutter test test/core/model/pure_unit_test.dart
+flutter test test/unit/core/model/pure_unit_test.dart
 ```
 
-Status: test file added. `flutter test test/core/model/pure_unit_test.dart` could not start because the Flutter batch wrapper returned a Windows access-denied error before Dart execution.
+Status: test file added. `flutter test test/unit/core/model/pure_unit_test.dart` could not start because the Flutter batch wrapper returned a Windows access-denied error before Dart execution.
 
 Known follow-ups exposed by this batch:
 

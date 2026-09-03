@@ -44,7 +44,7 @@ jobs:
         run: flutter analyze
 
       - name: Run tests
-        run: flutter test test/core test/features test/shared
+        run: flutter test test/unit/core test/unit/features test/shared
 
   integration-smoke:
     runs-on: ubuntu-latest
